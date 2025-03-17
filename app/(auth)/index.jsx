@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,27 +7,34 @@ import {
   ScrollView,
   Image,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import styles from "../../assets/styles/login.styles";
-import { Link } from "expo-router";
+import { Link,useRouter } from "expo-router";
 import COLORS from "../../constants/color";
+import useAuthStore from "../../store/authStore";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secureEntry, setSecureEntry] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { login, isAuthenticated, loading, error } = useAuthStore();
+  const router=useRouter();
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace("(tabs)"); // 👈 Use replace to avoid going back to login
+    }
+  }, [isAuthenticated]);
 
   const handleLogin = async () => {
-    setIsLoading(true);
-
-    // Simulate login process
-    setTimeout(() => {
-      setIsLoading(false);
-      // Navigate or show error
-      // navigation.navigate("Home"); // if login success
-    }, 2000);
+    const success = await login(email, password);
+    if (!success && error) {
+      Alert.alert("Login Error", error);
+    }
+    console.log("Success:",success);
+    
   };
 
   return (
@@ -36,7 +43,6 @@ const LoginScreen = () => {
       style={styles.scrollViewStyle}
       keyboardShouldPersistTaps="handled"
     >
-      {/* Top Illustration */}
       <View style={styles.topIllustration}>
         <Image
           source={require("../../assets/images/login.png")}
@@ -45,11 +51,8 @@ const LoginScreen = () => {
         />
       </View>
 
-      {/* Card */}
       <View style={styles.card}>
-        {/* Form */}
         <View style={styles.formContainer}>
-          {/* Email Input */}
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Email</Text>
             <View style={styles.inputContainer}>
@@ -65,7 +68,6 @@ const LoginScreen = () => {
             </View>
           </View>
 
-          {/* Password Input */}
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Password</Text>
             <View style={styles.inputContainer}>
@@ -83,13 +85,12 @@ const LoginScreen = () => {
             </View>
           </View>
 
-          {/* Login Button */}
           <TouchableOpacity
             style={styles.button}
             onPress={handleLogin}
-            disabled={isLoading}
+            disabled={loading}
           >
-            {isLoading ? (
+            {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
               <Text style={styles.buttonText}>Login</Text>
@@ -97,15 +98,13 @@ const LoginScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Footer */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>Don't have an account?</Text>
-          
-          <TouchableOpacity>
-          <Link href="/register">
-            <Text style={styles.link}>Sign Up</Text>
+          <Link href="/register" asChild>
+            <TouchableOpacity>
+              <Text style={styles.link}>Sign Up</Text>
+            </TouchableOpacity>
           </Link>
-          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

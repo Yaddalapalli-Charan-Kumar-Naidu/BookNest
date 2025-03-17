@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   View,
   Text,
@@ -7,33 +7,34 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
+  Alert,
 } from "react-native";
+
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import styles from "../../assets/styles/signup.styles";
 import COLORS from "../../constants/color"; // Import your COLORS constant
-import { Link } from "expo-router";
-
-const Register = () => {
+import { Link,useRouter } from "expo-router";
+import useAuthStore from "../../store/authStore.js";
+const Register = ({navigation}) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Loading state for sign-up button
   const [username, setUsername] = useState(""); // State for username
   const [email, setEmail] = useState(""); // State for email
   const [password, setPassword] = useState(""); // State for password
-
+  const {signup,loading,error,isAuthenticated}=useAuthStore();
+  const router=useRouter();
   // Dummy sign-up function
-  const handleSignUp = () => {
-    setIsLoading(true); // Start loading
+  useEffect(()=>{
+    if(isAuthenticated){
+  router.replace("(tabs)");
 
-    // Simulate an API call with a 2-second delay
-    setTimeout(() => {
-      // Log user details to the console
-      console.log("User Details:");
-      console.log("Username:", username);
-      console.log("Email:", email);
-      console.log("Password:", password);
-
-      setIsLoading(false); // Stop loading
-    }, 2000);
+    }
+  },[isAuthenticated]);
+  const handleSignUp =async () => {
+    const success=await signup(email,password,username);
+    if(!success && error){
+      return Alert.alert("Signup Error:",error);
+    }
+    // router.replace("(tabs)");
   };
 
   return (
@@ -122,11 +123,11 @@ const Register = () => {
 
             {/* Button */}
             <TouchableOpacity
-              style={[styles.button, isLoading && styles.disabledButton]}
+              style={[styles.button, loading && styles.disabledButton]}
               onPress={handleSignUp}
-              disabled={isLoading} // Disable button when loading
+              disabled={loading} // Disable button when loading
             >
-              {isLoading ? (
+              {loading ? (
                 <ActivityIndicator color={COLORS.white} /> // Show loading indicator
               ) : (
                 <Text style={styles.buttonText}>Sign Up</Text>
