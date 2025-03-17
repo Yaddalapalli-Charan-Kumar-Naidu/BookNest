@@ -1,4 +1,4 @@
-import {View,Text,TouchableOpacity} from 'react-native'
+import {View,Text,TouchableOpacity,StyleSheet} from 'react-native'
 
 import useAuthStore from "../../store/authStore"
 const Home=()=>{
@@ -8,7 +8,7 @@ const Home=()=>{
         console.log("logged out");
     }
     return(
-        <View>
+        <View style={styles.container}>
             <Text>Home page</Text>
             <TouchableOpacity onPress={handleLogout}>
                 <Text>logout</Text>
@@ -17,4 +17,12 @@ const Home=()=>{
     )
 
 }
+
+const styles=StyleSheet.create({
+    container:{
+        flex:1,
+        justifyContent:"center",
+        alignItems:"center",
+    }
+})
 export default Home;
