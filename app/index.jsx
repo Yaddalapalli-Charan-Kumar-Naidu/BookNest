@@ -23,7 +23,7 @@ export default function Index() {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text>Edit app/index.tsx to edit this screen.</Text>
-      <Link href="/(auth)">Login</Link> {/* Link to the login page */}
+      {/* <Link href="/(auth)"><Text>Login</Text></Link> Link to the login page */}
     </View>
   );
 }
