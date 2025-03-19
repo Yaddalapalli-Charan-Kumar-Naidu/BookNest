@@ -42,8 +42,13 @@ const {token}=useAuthStore();
       if (refreshing || pageNumber === 1) {
         setBooks(newBooks);
       } else {
-        setBooks((prev) => [...prev, ...newBooks]);
+        setBooks((prevBooks) => {
+          const existingIds = new Set(prevBooks.map(book => book._id)); // or book.id
+          const filteredNewBooks = newBooks.filter(book => !existingIds.has(book._id));
+          return [...prevBooks, ...filteredNewBooks];
+        });
       }
+      
 
       setPage(data.page);
       setHasMore(data.page < data.totalPages); // ✅ compare page with totalPages
@@ -128,7 +133,7 @@ const {token}=useAuthStore();
         }
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>BookWorm 🐛</Text>
+            <Text style={styles.headerTitle}>BookNest 📗</Text>
             <Text style={styles.headerSubtitle}>
               Discover great reads from the community 👇
             </Text>
