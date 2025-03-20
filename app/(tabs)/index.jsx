@@ -10,6 +10,7 @@ import {Image} from "expo-image"
 import styles from "../../assets/styles/home.styles";
 import COLORS from "../../constants/color";
 import useAuthStore from "../../store/authStore";
+import { useLocalSearchParams } from 'expo-router';
 const PAGE_SIZE = 3;
 
 const HomeScreen = () => {
@@ -20,6 +21,14 @@ const HomeScreen = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true); // ✅ track if more books exist
 const {token}=useAuthStore();
+
+const { refresh } = useLocalSearchParams();
+
+  useEffect(() => {
+    if (refresh) {
+      fetchBooks(); // Call your data fetch
+    }
+  }, [refresh]);
   const fetchBooks = async (pageNumber = 1, refreshing = false) => {
     try {
       if (refreshing) setRefreshing(true);
@@ -128,7 +137,7 @@ const {token}=useAuthStore();
         }
         ListFooterComponent={
           loadingMore ? (
-            <ActivityIndicator style={styles.footerLoader} />
+            <ActivityIndicator style={styles.footerLoader} color={COLORS.primary} />
           ) : null
         }
         ListHeaderComponent={

@@ -132,7 +132,10 @@ export default function create() {
       setRating(3);
       setImage(null);
       setImageBase64(null);
-      router.push("/");
+      const timestamp = new Date().getTime();
+  router.push(`/?refresh=${timestamp}`); // 👈 add query param
+
+
   
     } catch (error) {
       console.error('Error creating post:', error);
@@ -213,7 +216,7 @@ export default function create() {
                 <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={loading}>
                     {
                         loading?(
-                            <ActivityIndicator color={COLORS.white} />
+                            <ActivityIndicator color={COLORS.primary} />
                         ):
                         (
                             <>

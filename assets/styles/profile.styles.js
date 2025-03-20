@@ -1,6 +1,6 @@
 // styles/profile.styles.js
 import { StyleSheet } from "react-native";
-import COLORS from "../../constants/colors";
+import COLORS from "../../constants/color";
 
 const styles = StyleSheet.create({
   container: {
@@ -169,6 +169,13 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 14,
   },
+  noBooks:{
+    color:COLORS.primary,
+    fontweight:"300",
+    textAlign:"center",
+    justifyContent:"center",
+    alignItems: "center",
+  }
 });
 
 export default styles;
