@@ -19,7 +19,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from 'expo-file-system'
 import useAuthStore from "../../store/authStore"
 export default function create() {
-    const {token}=useAuthStore();
+  const {token}=useAuthStore();
   const [title, setTitle] = useState("");
   const [rating, setRating] = useState(3);
   const [image, setImage] = useState("");
